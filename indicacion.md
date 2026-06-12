@@ -22,22 +22,28 @@ Render es un servicio gratuito para alojar APIs de Node.js.
 3. Haz clic en "New +" y selecciona "Web Service".
 4. Conecta tu cuenta de GitHub y selecciona el repositorio del Backend.
 5. Configura el Web Service:
-   - **Environment**: Node
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start` (o `node index.js`)
+    - **Root Directory**: `Backend` (Esto es muy importante porque tu proyecto está dividido en subcarpetas. Si no lo pones, Render buscará un package.json en la raíz del repositorio y fallará).
+    - **Environment**: Node
+    - **Build Command**: `npm install`
+    - **Start Command**: `npm start`
 6. En la sección **Environment Variables**, añade las siguientes variables:
-   - `PORT`: (Render lo asignará automáticamente, pero puedes poner `4000`)
-   - `NODE_ENV`: `production`
-   - `DB_URI`: Pega la URL que copiaste de MongoDB Atlas (asegúrate de poner la contraseña real).
-   - `JWT_Secret_key`: Tu secreto JWT
-   - `USER_EMAIL`: Tu correo para enviar emails
-   - `USER_PASSWORD`: Tu contraseña de aplicación
-   - `GEMINI_API_KEY`: Tu clave de Gemini
-   - `CLOUDINARY_CLOUD_NAME`: Tu Cloudinary cloud name
-   - `CLOUDINARY_API_KEY`: Tu Cloudinary API key
-   - `CLOUDINARY_API_SECRET`: Tu Cloudinary API secret
-   - `FRONTEND_URL`: Aquí pondrás la URL de Vercel cuando la tengas (temporalmente puedes poner un placeholder o dejarla en blanco y actualizarla después).
+    - `PORT`: `4000` (Render lo asignará automáticamente, pero es bueno tenerlo declarado)
+    - `NODE_ENV`: `production`
+    - `DB_URI`: Pega la URL que copiaste de MongoDB Atlas (asegúrate de poner la contraseña real).
+    - `JWT_Secret_key`: Tu secreto JWT
+    - `USER_EMAIL`: Tu correo para enviar emails
+    - `USER_PASSWORD`: Tu contraseña de aplicación
+    - `GEMINI_API_KEY`: Tu clave de Gemini
+    - `CLOUDINARY_CLOUD_NAME`: Tu Cloudinary cloud name
+    - `CLOUDINARY_API_KEY`: Tu Cloudinary API key
+    - `CLOUDINARY_API_SECRET`: Tu Cloudinary API secret
+    - `FRONTEND_URL`: Aquí pondrás la URL de Vercel cuando la tengas (temporalmente puedes poner un placeholder o dejarla en blanco y actualizarla después).
 7. Haz clic en "Create Web Service". Copia la URL que te da Render (ej: `https://fitbattle-backend.onrender.com`).
+
+> [!NOTE]
+> **Sobre el mensaje "It looks like we don't have access to your repo":**
+> Si tu repositorio es privado, asegúrate de conectar Render usando el botón de GitHub en el panel de Render en lugar de pegar la URL HTTPS directamente. Esto le dará los permisos correctos a Render para clonar tu código.
+
 
 ## 3. Despliegue del Frontend en Vercel
 
