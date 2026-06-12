@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 //User Routes
 import registerUserRoutes from "./src/Routes/registerUser.routes.js";
@@ -19,10 +22,25 @@ import userRoutes from "./src/Routes/user.routes.js";
 
 const app = express();
 
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    "http://localhost:5173",
+    "http://localhost:5174"
+].filter(Boolean).map(origin => origin.replace(/\/$/, ""));
+
 app.use(cors({
-    origin: [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:5174"],
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, or Postman)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin) || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+            callback(null, true);
+        } else {
+            console.log(`CORS blocked for origin: ${origin}. Allowed origins:`, allowedOrigins);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
-}))
+}));
 
 app.use(cookieParser())
 
