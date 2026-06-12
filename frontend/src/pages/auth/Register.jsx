@@ -21,23 +21,32 @@ const Register = () => {
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleRegister = async () => {
+    console.log("Iniciando handleRegister...", formData);
     if (formData.password !== formData.confirmPassword) {
+      console.warn("Las contraseñas no coinciden");
       return Swal.fire('Error', 'Las contraseñas no coinciden', 'error');
     }
     try {
-      const res = await fetch(`${API_BASE_URL}/api/register`, {
+      const url = `${API_BASE_URL}/api/register`;
+      console.log("Enviando petición POST a:", url);
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(formData)
       });
+      console.log("Respuesta recibida. Estatus:", res.status);
       const data = await res.json();
+      console.log("Datos del servidor:", data);
       if (res.ok) {
+        console.log("Registro exitoso, redirigiendo...");
         navigate('/verify-code');
       } else {
+        console.warn("Registro fallido:", data.message);
         Swal.fire('Error', data.message || 'Error al registrar', 'error');
       }
     } catch (err) {
+      console.error("Error de conexión:", err);
       Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
     }
   };

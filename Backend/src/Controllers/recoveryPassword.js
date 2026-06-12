@@ -30,7 +30,10 @@ recoveryPasswordController.requestCode = async (req, res) => {
     res.cookie("recoveryCookie", token, { maxAge: 15 * 60 * 1000 });
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      family: 4, // Force IPv4 to bypass Render's lack of IPv6 outbound support
       auth: {
         user: config.email.user_email,
         pass: config.email.user_password,
