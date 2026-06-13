@@ -40,7 +40,14 @@ const Register = () => {
       console.log("Datos del servidor:", data);
       if (res.ok) {
         console.log("Registro exitoso, redirigiendo...");
-        navigate('/verify-code');
+        Swal.fire({
+          title: '¡Registro completado!',
+          text: 'Tu cuenta ha sido creada exitosamente. Ya puedes iniciar sesión.',
+          icon: 'success',
+          confirmButtonColor: '#E11D48',
+        }).then(() => {
+          navigate('/login');
+        });
       } else {
         console.warn("Registro fallido:", data.message);
         Swal.fire('Error', data.message || 'Error al registrar', 'error');

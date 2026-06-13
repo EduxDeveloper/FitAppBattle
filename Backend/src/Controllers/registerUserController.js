@@ -32,55 +32,24 @@ registerUserController.register = async (req, res) => {
     }
 
     const passwordHashed = await bcryptjs.hash(password, 10);
-    const randomCode = crypto.randomBytes(3).toString("hex").toUpperCase();
 
-    const token = jsonwebtoken.sign(
-      {
-        randomCode,
-        name,
-        username,
-        email,
-        password: passwordHashed,
-        age,
-        gender,
-        weightKg,
-        heightCm,
-        activityLevel,
-        isVerified: false,
-        loginAttemps: 0,
-        timeOut: null,
-      },
-      config.JWT.secret,
-      { expiresIn: "15m" }
-    );
-
-    res.cookie("registrationCookie", token, { maxAge: 15 * 60 * 1000 });
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      family: 4, // Force IPv4 to bypass Render's lack of IPv6 outbound support
-      auth: {
-        user: config.email.user_email,
-        pass: config.email.user_password,
-      },
+    const newUser = new userModel({
+      name,
+      username,
+      email,
+      password: passwordHashed,
+      age,
+      gender,
+      weightKg,
+      heightCm,
+      activityLevel,
+      isVerified: true,
+      loginAttemps: 0,
+      timeOut: null,
     });
 
-    const mailOptions = {
-      from: config.email.user_email,
-      to: email,
-      subject: "Verificación de cuenta - FitBattle AI",
-      text: "Para verificar tu cuenta, utiliza este código: " + randomCode + " . Expira en 15 minutos",
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log("error " + error);
-        return res.status(500).json({ message: "Error sending email" });
-      }
-      return res.status(200).json({ message: "Email sent" });
-    });
+    await newUser.save();
+    return res.status(200).json({ message: "User registered successfully" });
   } catch (error) {
     console.log("error " + error);
     return res.status(500).json({ message: "Internal server error" });
